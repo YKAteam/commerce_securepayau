@@ -3,6 +3,6 @@ type: module
 description: Integrates SecurePay.com.au with Commerce Payment
 package: Commerce (contrib)
 dependencies:
-  - commerce
-  - commerce_payment
+  - drupal:commerce
+  - drupal:commerce_payment
 core: 8.x

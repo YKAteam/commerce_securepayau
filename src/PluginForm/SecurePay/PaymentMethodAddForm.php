@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\commerce_payment\PluginForm\PaymentMethodAddForm as BasePaymentMethodAddForm;
 
 /**
- * @inheritDoc
+ * Payment Method Add Form.
  */
 class PaymentMethodAddForm extends BasePaymentMethodAddForm {
 
@@ -63,8 +63,6 @@ class PaymentMethodAddForm extends BasePaymentMethodAddForm {
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
-    $payment_method = $this->entity;
     $this->validateCreditCardForm($form['payment_details'], $form_state);
   }
 

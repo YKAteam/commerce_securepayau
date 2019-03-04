@@ -2,15 +2,15 @@
 
 namespace Drupal\commerce_securepayau\Plugin\Commerce\PaymentGateway;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
-use Drupal\commerce_payment\Exception\PaymentGatewayException;
 use Drupal\commerce_payment\Exception\HardDeclineException;
+use Drupal\commerce_payment\Exception\PaymentGatewayException;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OnsitePaymentGatewayBase;
-use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Drupal\commerce_securepayau\Controller\SecurePayXML;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the SecurePay payment gateway.
@@ -152,7 +152,6 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
       ];
     }
 
-    // \Drupal::moduleHandler()->alter('commerce_securepayauau_xmlapi_settings_form', $form, $settings);.
     return $form;
   }
 
@@ -208,10 +207,9 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
    * Set Creditcard details to session.
    *
    * @param array $payment_details
-   *
-   * @return void
+   *   Payment details.
    */
-  private static function setPaymentDetails($payment_details) {
+  private static function setPaymentDetails(array $payment_details) {
     $request = \Drupal::request();
     $session = $request->getSession();
     $session->set('payment_details', $payment_details);
@@ -219,8 +217,6 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
 
   /**
    * Get Credit Card details from Sesssion.
-   *
-   * @return void
    */
   private static function getPaymentDetails() {
     $request = \Drupal::request();
@@ -230,8 +226,6 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
 
   /**
    * Unset variable with Credit Card Details.
-   *
-   * @return void
    */
   private static function destroyPaymentDetails() {
     $request = \Drupal::request();
@@ -249,7 +243,7 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
 
     // Perform the create payment request here, throw an exception if it fails.
     $securepay = new SecurePayXML($this->configuration, $payment, static::getPaymentDetails());
-    $response = $securepay->sendXMLRequest();
+    $response = $securepay->sendXmlRequest();
 
     if (!$response) {
       \Drupal::logger('commerce_securepayau')->error(serialize($response));
@@ -267,7 +261,6 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
     }
 
     // Remember to take into account $capture when performing the request.
-    $amount = $payment->getAmount();
     $next_state = $capture ? 'completed' : 'authorization';
     $remote_id = $response['txnID'];
     $payment->setState($next_state);
