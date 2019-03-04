@@ -24,7 +24,12 @@ class SecurePayPaymentMethodType extends PaymentMethodTypeBase {
     $request = \Drupal::request();
     $session = $request->getSession();
     $payment_details = $session->get('payment_details');
-    $card_type = CreditCardHelper::getType($payment_details['type']);
+    try {
+      $card_type = CreditCardHelper::getType($payment_details['type']);
+    }
+    catch (\Exception $e) {
+      return 'Unknown';
+    }
     $args = [
       '@card_type' => $card_type->getLabel(),
       '@card_number' => substr($payment_details['number'], -4),

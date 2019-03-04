@@ -196,7 +196,7 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
       }
     }
 
-    /**@todo Make it more secure by calling creating remote_id */
+    // @todo Make it more secure by calling creating remote_id.
     static::setPaymentDetails($payment_details);
 
     // Setting static payment info.
@@ -272,7 +272,6 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
     $remote_id = $response['txnID'];
     $payment->setState($next_state);
     $payment->setRemoteId($remote_id);
-    static::destroyPaymentDetails();
     $payment->save();
   }
 

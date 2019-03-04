@@ -41,7 +41,6 @@ class SecurePayXML extends ControllerBase {
    * @param array $payment_details
    */
   public function __construct($configuration, PaymentInterface $payment, $payment_details) {
-
     $this->configuration = $configuration;
     $this->payment = $payment;
     $this->payment_details = $payment_details;
@@ -59,13 +58,13 @@ class SecurePayXML extends ControllerBase {
   public function sendXMLRequest() {
 
     /**
-         * @var \Drupal\commerce_order\Entity\OrderInterface $order
-         */
+     * @var \Drupal\commerce_order\Entity\OrderInterface $order
+     */
     $order = $this->payment->getOrder();
 
     /**
-         * @var mixed $xml
-         */
+     * @var mixed $xml
+     */
     $xml = $this->createXMLRequestString();
 
     if ($this->configuration['mode'] == 'live') {
