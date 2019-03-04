@@ -1,0 +1,9 @@
+{
+  "name": "drupal/commerce_securepayau",
+  "description": "D8 Port of drupal.org/project/commerce_securepayau.",
+  "type": "drupal-module",
+  "support": {
+    "issues": "https://github.com/YKAteam/commerce_securepayau/issues",
+    "source": "https://github.com/YKAteam/commerce_securepayau"
+  }
+}
