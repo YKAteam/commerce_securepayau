@@ -13,6 +13,14 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * Class SecurePayXML.
  */
 class SecurePayXML extends ControllerBase {
+
+  /**
+   * Endpoint to make a payment.
+   *
+   * @var string
+   */
+  const ENDPOINT_PAYMENT = 'payment';
+
   /**
    * API Details from Payment method form.
    *
@@ -88,11 +96,11 @@ class SecurePayXML extends ControllerBase {
   public function sendXmlRequest() {
     $xml = $this->createXmlRequestString();
 
-    if ($this->configuration['mode'] == 'live') {
-      $post_url = $this->configuration['gateway_urls']['live'];
+    if ($this->configuration['mode'] === 'live') {
+      $post_url = $this->configuration['gateway_urls']['live'] . '/' . static::ENDPOINT_PAYMENT;
     }
     else {
-      $post_url = $this->configuration['gateway_urls']['test'];
+      $post_url = $this->configuration['gateway_urls']['test'] . '/' . static::ENDPOINT_PAYMENT;
     }
 
     $ch = curl_init();

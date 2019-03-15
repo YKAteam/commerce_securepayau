@@ -25,8 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   },
  *   payment_method_types = {"secure_pay_cc"},
  *   credit_card_types = {
- *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard",
- *   "visa",
+ *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard", "visa",
  *   },
  * )
  */
@@ -243,11 +242,21 @@ class SecurePay extends OnsitePaymentGatewayBase implements SecurePayInterface {
 
     // Perform the create payment request here, throw an exception if it fails.
     $securepay = new SecurePayXML($this->configuration, $payment, static::getPaymentDetails());
-    $response = $securepay->sendXmlRequest();
+    try {
+      $response = $securepay->sendXmlRequest();
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('commerce_securepayau')->error($this->t('Error connecting to secure pay API: @error', [
+        '@error' => $e->getMessage(),
+      ]));
+      drupal_set_message(t('Error connecting to SecurePay.'), 'error', FALSE);
+      throw new PaymentGatewayException('We could not connect to SecurePay.');
+    }
 
     if (!$response) {
       \Drupal::logger('commerce_securepayau')->error(serialize($response));
-      throw new Exception("We could not connect to SecurePay.");
+      drupal_set_message(t('Error connecting to SecurePay.'), 'error', FALSE);
+      throw new PaymentGatewayException('We could not connect to SecurePay.');
     }
 
     if ($response['statusCode'] != "000") {
